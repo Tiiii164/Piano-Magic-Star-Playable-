@@ -7,17 +7,23 @@ public class LaneLayoutController : MonoBehaviour
     [SerializeField] private Image _background;
     [SerializeField] private Sprite _landscapeBg;
     [SerializeField] private Sprite _portraitBg;
-
-    [Header("References")]
     [SerializeField] private RectTransform _laneContainer;
-    [SerializeField] private RectTransform[] _lanes;
+    [SerializeField] private GameObject _linePrefab;
 
-    [Header("Landscape Settings (16:9)")]
-    [SerializeField] private float _landscapeLaneWidth = 200f;
+    [Header("Lane Settings")]
+    [SerializeField] private int _laneCount = 4;
+    [SerializeField] private float _lineWidth = 5f;
+
+    [Header("Landscape Config")]
+    [SerializeField] private float _maxLandscapeWidth = 800f;
+    [SerializeField] private bool _limitLandscapeWidth = true;
+
+    private RectTransform[] _lanes;
 
     private void Start()
     {
         SetupLayout();
+        GenerateLanes();
     }
 
     private void SetupLayout()
@@ -26,43 +32,61 @@ public class LaneLayoutController : MonoBehaviour
 
         if (aspectRatio > 1f)
         {
-            SetupLandscape();
+            _background.sprite = _landscapeBg;
         }
         else
         {
-            SetupPortrait();
+            _background.sprite = _portraitBg;
         }
     }
 
-    private void SetupLandscape()
+    private void GenerateLanes()
     {
-        float totalWidth = _landscapeLaneWidth * _lanes.Length;
+        float aspectRatio = (float)Screen.width / Screen.height;
+        float containerWidth = _laneContainer.rect.width;
 
-        //_laneContainer.SetSizeWithCurrentAnchors(
-        //    RectTransform.Axis.Horizontal,
-        //    totalWidth);
-        _background.sprite = _landscapeBg;
+        float playAreaWidth = containerWidth;
 
-
-        for (int i = 0; i < _lanes.Length; i++)
+        if (aspectRatio > 1f && _limitLandscapeWidth)
         {
-            _lanes[i].SetSizeWithCurrentAnchors(
-                RectTransform.Axis.Horizontal,
-                _landscapeLaneWidth);
+            playAreaWidth = Mathf.Min(containerWidth, _maxLandscapeWidth);
+        }
+
+        float startX = (containerWidth - playAreaWidth) * 0.5f;
+        float laneWidth = playAreaWidth / _laneCount;
+
+        for (int i = 0; i <= _laneCount; i++)
+        {
+            GameObject line = Instantiate(_linePrefab, _laneContainer);
+            RectTransform rect = line.GetComponent<RectTransform>();
+
+            rect.anchorMin = new Vector2(0, 0);
+            rect.anchorMax = new Vector2(0, 1);
+            rect.pivot = new Vector2(0, 0.5f);
+
+            rect.sizeDelta = new Vector2(_lineWidth, 0);
+
+            float xPos = startX + laneWidth * i - 2f;
+            rect.anchoredPosition = new Vector2(xPos, 0);
         }
     }
 
-    private void SetupPortrait()
+    public Vector2 GetLaneCenterPosition(int laneIndex)
     {
-        float screenWidth = _laneContainer.rect.width;
-        float laneWidth = screenWidth / _lanes.Length;
+        float containerWidth = _laneContainer.rect.width;
+        float aspectRatio = (float)Screen.width / Screen.height;
 
-        _background.sprite = _portraitBg;
-        for (int i = 0; i < _lanes.Length; i++)
+        float playAreaWidth = containerWidth;
+
+        if (aspectRatio > 1f && _limitLandscapeWidth)
         {
-            _lanes[i].SetSizeWithCurrentAnchors(
-                RectTransform.Axis.Horizontal,
-                laneWidth);
+            playAreaWidth = Mathf.Min(containerWidth, _maxLandscapeWidth);
         }
+
+        float startX = (containerWidth - playAreaWidth) * 0.5f;
+        float laneWidth = playAreaWidth / _laneCount;
+
+        float x = startX + laneWidth * laneIndex + laneWidth * 0.5f;
+        return new Vector2(x, 0);
     }
 }
