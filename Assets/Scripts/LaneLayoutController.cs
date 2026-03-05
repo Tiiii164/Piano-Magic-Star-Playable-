@@ -66,7 +66,7 @@ public class LaneLayoutController : MonoBehaviour
 
             rect.sizeDelta = new Vector2(_lineWidth, 0);
 
-            float xPos = startX + laneWidth * i - 2f;
+            float xPos = startX + laneWidth * i - 2;
             rect.anchoredPosition = new Vector2(xPos, 0);
         }
     }

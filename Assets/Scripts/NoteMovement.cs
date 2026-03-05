@@ -3,7 +3,7 @@ using UnityEngine;
 public class NoteMovement : MonoBehaviour
 {
     [SerializeField] private float _speed = 600f;
-
+    [SerializeField] private GameObject afterTabImage;
     private RectTransform _rect;
 
     private void Awake()

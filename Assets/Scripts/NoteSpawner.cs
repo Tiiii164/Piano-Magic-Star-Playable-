@@ -61,6 +61,7 @@ public class NoteSpawner : MonoBehaviour
         RectTransform rect = note.GetComponent<RectTransform>();
 
         Vector2 lanePos = _laneLayout.GetLaneCenterPosition(data.LaneIndex);
+        Debug.Log($"Spawning note in lane {data.LaneIndex} at position {lanePos.x}");
 
         rect.anchoredPosition = new Vector2(lanePos.x, _spawnHeight);
 
