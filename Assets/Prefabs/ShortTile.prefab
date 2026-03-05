@@ -125,13 +125,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: -4694145575729612423}
+        m_TargetAssemblyTypeName: NoteMovement, Assembly-CSharp
+        m_MethodName: ShowAfterTabImage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoteMovement
   _speed: 1200
-  afterTabImage: {fileID: 0}
+  afterTabImage: {fileID: 5550418092655677027}
 --- !u!95 &3991565862131974508
 Animator:
   serializedVersion: 7

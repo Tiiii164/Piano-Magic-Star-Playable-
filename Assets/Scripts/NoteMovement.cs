@@ -16,6 +16,11 @@ public class NoteMovement : MonoBehaviour
         
     }
 
+    public void ShowAfterTabImage()
+    {
+        afterTabImage.SetActive(true);
+    }
+
     private void Update()
     {
         _rect.anchoredPosition += Vector2.down * _speed * Time.deltaTime;
