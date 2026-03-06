@@ -3,11 +3,9 @@ using UnityEngine.UI;
 
 public class BackGroundSetUp : MonoBehaviour
 {
-    [Header("Layout")]
     [SerializeField] private Image _background;
     [SerializeField] private Sprite _landscapeBg;
     [SerializeField] private Sprite _portraitBg;
-
 
     void Start()
     {

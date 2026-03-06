@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using DG.Tweening;
 
 public class NoteSpawner : MonoBehaviour
 {
@@ -31,7 +30,6 @@ public class NoteSpawner : MonoBehaviour
     private List<NoteData> _notes;
     private int _nextNoteIndex = 0;
     private float _gameplayTime = 0f;
-    //private bool _audioStarted = false;
     public bool _isPlaying = false;
     private int _score = 0;
 
@@ -80,7 +78,6 @@ public class NoteSpawner : MonoBehaviour
         _endAudioSource.Play();
         _blackBackground.SetActive(true);
         StartCoroutine(DelayEndGame());
-        Debug.Log("Game Over! Final Score: " + _score);
     }
 
     private IEnumerator DelayEndGame()
@@ -118,10 +115,37 @@ public class NoteSpawner : MonoBehaviour
 
         RectTransform handRect = _handPrefab.GetComponent<RectTransform>();
         handRect.anchoredPosition = startNotePos + offset;
-        handRect.DOAnchorPos(handRect.anchoredPosition + offset * 1.2f, 1)
-                 .SetEase(Ease.OutSine)
-                 .SetLoops(-1, LoopType.Yoyo);
+
+        StartCoroutine(HandAnimCoroutine(handRect, offset));
     }
+
+    private IEnumerator HandAnimCoroutine(RectTransform handRect, Vector2 offset)
+    {
+        Vector2 startPos = handRect.anchoredPosition;
+        Vector2 endPos = startPos + offset * 1.2f;
+        float duration = 1f;
+
+        while (true)
+        {
+            yield return MoveRect(handRect, startPos, endPos, duration);
+
+            yield return MoveRect(handRect, endPos, startPos, duration);
+        }
+    }
+
+    private IEnumerator MoveRect(RectTransform rect, Vector2 from, Vector2 to, float duration)
+    {
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float progress = Mathf.Sin((t / duration) * Mathf.PI * 0.5f);
+            rect.anchoredPosition = Vector2.Lerp(from, to, progress);
+            yield return null;
+        }
+        rect.anchoredPosition = to;
+    }
+
 
     private void SpawnNote(NoteData data)
     {
@@ -135,7 +159,6 @@ public class NoteSpawner : MonoBehaviour
         rect.anchoredPosition = new Vector2(lanePos.x, _spawnHeight);
 
         NoteMovement movement = note.GetComponent<NoteMovement>();
-        movement.Initialize(data.Duration);
     }
     public void AddScore(int amount)
     {
