@@ -18,8 +18,6 @@ public class LaneLayoutController : MonoBehaviour
     [SerializeField] private float _maxLandscapeWidth = 800f;
     [SerializeField] private bool _limitLandscapeWidth = true;
 
-    private RectTransform[] _lanes;
-
     private void Start()
     {
         SetupLayout();
